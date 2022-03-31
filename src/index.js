@@ -34,10 +34,7 @@ function onSearch(e) {
             }
             else if (result.length === 1) {
                 refs.countryList.innerHTML = "";
-                const makeCountryCard = result
-                .map(makeCountryCardMarkup)
-                    .join('');
-                refs.countryCard.innerHTML = makeCountryCard;
+                refs.countryCard.innerHTML = makeCountryCardMarkup(result[0]);
             }
         })
         .catch(error => {
