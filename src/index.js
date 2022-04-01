@@ -16,13 +16,10 @@ refs.searchBox.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 function onSearch(e) {
     e.preventDefault();
     let searchQuery = refs.searchBox.value.trim();
-    let promise = fetchCountries(searchQuery)
+    fetchCountries(searchQuery)
         .then(result => {
-            if (result.includes('404'))
-                promise.reject;
             if (result.length > 10) {
-                refs.countryCard.innerHTML = "";
-                refs.countryList.innerHTML = "";
+                clearFields();
                 Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
             }
             else if (result.length > 2 && result.length < 10) {
@@ -39,7 +36,10 @@ function onSearch(e) {
         })
         .catch(error => {
             console.log(error);
-            Notiflix.Notify.failure('Oops, there is no country with that name');
+            clearFields();
+            if (searchQuery) {
+                Notiflix.Notify.failure('Oops, there is no country with that name');
+            }
         });
 }
   
@@ -65,6 +65,11 @@ const makeCountryCardMarkup = country => {
     <p class='countryCard__value'><span class='countryCard__label'>Languages: </span>${languages}</p>
   </div>`;
 };
+
+const clearFields = () => {
+    refs.countryCard.innerHTML = "";
+    refs.countryList.innerHTML = "";
+}
 
 
 
